@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phantom Unblocked</title>
+    <title>LCC Games Hub</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="styles/main.css">
@@ -29,17 +29,18 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 80px 24px 40px;
-            text-align: center;
+            justify-content: flex-start;
+            padding: 96px 24px 56px;
+            text-align: left;
+            gap: 32px;
         }
 
         .site-title {
-            font-size: 2.5rem;
+            font-size: 2.75rem;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             letter-spacing: -0.02em;
-            background: linear-gradient(90deg, #e4e4e7 0%, #a1a1aa 40%, #52525b 100%);
+            background: linear-gradient(120deg, #38bdf8 0%, #22d3ee 45%, #a78bfa 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -48,15 +49,214 @@
         .site-subtitle {
             font-size: 1rem;
             color: var(--text-muted);
-            margin-bottom: 32px;
+            margin-bottom: 20px;
             min-height: 24px;
+        }
+
+        .hero-grid {
+            width: 100%;
+            max-width: 1100px;
+            display: grid;
+            grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+            gap: 24px;
+            align-items: stretch;
+        }
+
+        .hero-card {
+            background: linear-gradient(140deg, rgba(56, 189, 248, 0.08), rgba(167, 139, 250, 0.08));
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .hero-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            background: rgba(56, 189, 248, 0.12);
+            color: #bae6fd;
+            margin-bottom: 16px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+
+        .hero-actions a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .primary-action {
+            background: linear-gradient(120deg, #38bdf8, #6366f1);
+            color: #0f172a;
+        }
+
+        .secondary-action {
+            border: 1px solid var(--border);
+            color: var(--text);
+            background: var(--surface);
+        }
+
+        .hero-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .metric-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 14px 16px;
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .metric-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .music-widget {
+            background: linear-gradient(140deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.7));
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 999px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: var(--shadow-lg);
+            max-width: 360px;
+            width: 100%;
+        }
+
+        .music-art {
+            width: 56px;
+            height: 56px;
+            border-radius: 999px;
+            overflow: hidden;
+            background: rgba(56, 189, 248, 0.2);
+            border: 2px solid rgba(56, 189, 248, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .music-art img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .music-body {
+            flex: 1;
+            display: grid;
+            gap: 6px;
+        }
+
+        .music-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .music-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .music-artist {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        .music-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .music-control-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            background: rgba(15, 23, 42, 0.6);
+            color: var(--text);
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+        }
+
+        .music-control-btn.play {
+            width: 34px;
+            height: 34px;
+            background: linear-gradient(120deg, #38bdf8, #818cf8);
+            color: #0f172a;
+            border: none;
+        }
+
+        .music-progress {
+            height: 4px;
+            border-radius: 999px;
+            background: rgba(148, 163, 184, 0.2);
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .music-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(120deg, #38bdf8, #a78bfa);
+        }
+
+        .music-timestamps {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .music-open {
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            background: rgba(15, 23, 42, 0.6);
+            color: var(--text);
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 0.7rem;
+            cursor: pointer;
         }
 
         /* Search Bar */
         .search-container {
             width: 100%;
-            max-width: 500px;
-            margin-bottom: 48px;
+            max-width: 720px;
+            margin-bottom: 8px;
         }
 
         .search-bar {
@@ -100,7 +300,7 @@
         /* Featured Section */
         .featured-section {
             width: 100%;
-            max-width: 800px;
+            max-width: 960px;
         }
 
         .section-header {
@@ -179,9 +379,15 @@
 
 
 
+        @media (max-width: 960px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         @media (max-width: 640px) {
             .site-title {
-                font-size: 1.75rem;
+                font-size: 2rem;
             }
 
             .featured-grid {
@@ -189,7 +395,10 @@
                 gap: 8px;
             }
 
-
+            .hero-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
         }
     </style>
     <script src="config.js"></script>
@@ -220,8 +429,64 @@
         <script src="components/topbar.js"></script>
 
         <main class="main-content">
-            <h1 class="site-title">Phantom Unblocked</h1>
-            <p class="site-subtitle" id="subtitle"></p>
+            <div class="hero-grid">
+                <section class="hero-card">
+                    <div class="hero-pill"><i class="fa-solid fa-bolt"></i> LCC Games</div>
+                    <h1 class="site-title">LCC Games Hub</h1>
+                    <p class="site-subtitle" id="subtitle"></p>
+                    <p class="text-sm">Your new launchpad for games, streaming, AI, and browser tools — reimagined with a sharper
+                        look.</p>
+                    <div class="hero-actions">
+                        <a class="primary-action" href="pages/games.html"><i class="fa-solid fa-gamepad"></i> Explore Games</a>
+                        <a class="secondary-action" href="pages/music.html"><i class="fa-solid fa-music"></i> Open Music</a>
+                    </div>
+                    <div class="hero-metrics">
+                        <div class="metric-card">
+                            <div class="metric-label">Theme</div>
+                            <div class="metric-value">LCC Neon</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Status</div>
+                            <div class="metric-value">All Systems Ready</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Shortcuts</div>
+                            <div class="metric-value">10+ Quick Links</div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="music-widget" id="music-widget" aria-label="Music player widget">
+                    <div class="music-art">
+                        <img id="music-cover" alt="Album cover" src="" />
+                    </div>
+                    <div class="music-body">
+                        <div class="music-label">Now playing</div>
+                        <div class="music-title" id="music-title">Loading track</div>
+                        <div class="music-artist" id="music-artist">Loading artist</div>
+                        <div class="music-progress" id="music-progress">
+                            <div class="music-progress-bar" id="music-progress-bar"></div>
+                        </div>
+                        <div class="music-timestamps">
+                            <span id="music-current">0:00</span>
+                            <span id="music-duration">0:00</span>
+                        </div>
+                    </div>
+                    <div class="music-controls">
+                        <button class="music-control-btn" id="music-prev" type="button" aria-label="Previous track">
+                            <i class="fa-solid fa-backward-step"></i>
+                        </button>
+                        <button class="music-control-btn play" id="music-play" type="button" aria-label="Play or pause">
+                            <i class="fa-solid fa-play"></i>
+                        </button>
+                        <button class="music-control-btn" id="music-next" type="button" aria-label="Next track">
+                            <i class="fa-solid fa-forward-step"></i>
+                        </button>
+                        <button class="music-open" type="button" onclick="location.href='pages/music.html'">Open</button>
+                    </div>
+                    <audio id="music-audio" preload="metadata"></audio>
+                </section>
+            </div>
 
             <!-- Search Bar -->
             <div class="search-container">
@@ -269,6 +534,140 @@
                 fragment.appendChild(card);
             });
             grid.appendChild(fragment);
+        })();
+
+        // Music widget
+        (() => {
+            const playlist = [
+                {
+                    title: 'Skyline Drift',
+                    artist: 'LCC Sound',
+                    src: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_6f3297f0d1.mp3?filename=chill-ambient-11099.mp3',
+                    cover: 'https://images.unsplash.com/photo-1485579149621-3123dd979885?q=80&w=1200&auto=format&fit=crop'
+                },
+                {
+                    title: 'Arcade Pulse',
+                    artist: 'Night Grid',
+                    src: 'https://cdn.pixabay.com/download/audio/2022/10/30/audio_fa6cefe804.mp3?filename=cyberpunk-ambient-121317.mp3',
+                    cover: 'https://images.unsplash.com/photo-1520975682031-44f04d2dc5b7?q=80&w=1200&auto=format&fit=crop'
+                },
+                {
+                    title: 'Afterglow',
+                    artist: 'Neon Vista',
+                    src: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c32b602ac1.mp3?filename=ambient-10961.mp3',
+                    cover: 'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?q=80&w=1200&auto=format&fit=crop'
+                }
+            ];
+
+            const audio = document.getElementById('music-audio');
+            const playBtn = document.getElementById('music-play');
+            const prevBtn = document.getElementById('music-prev');
+            const nextBtn = document.getElementById('music-next');
+            const titleEl = document.getElementById('music-title');
+            const artistEl = document.getElementById('music-artist');
+            const coverEl = document.getElementById('music-cover');
+            const progress = document.getElementById('music-progress');
+            const progressBar = document.getElementById('music-progress-bar');
+            const currentTimeEl = document.getElementById('music-current');
+            const durationEl = document.getElementById('music-duration');
+            const widget = document.getElementById('music-widget');
+
+            if (!audio || !playBtn || !widget) return;
+
+            let currentIndex = 0;
+            let isPlaying = false;
+
+            const formatTime = (time) => {
+                if (!Number.isFinite(time)) return '0:00';
+                const minutes = Math.floor(time / 60);
+                const seconds = Math.floor(time % 60).toString().padStart(2, '0');
+                return `${minutes}:${seconds}`;
+            };
+
+            const loadTrack = (index) => {
+                const track = playlist[index];
+                if (!track) return;
+                currentIndex = index;
+                titleEl.textContent = track.title;
+                artistEl.textContent = track.artist;
+                coverEl.src = track.cover;
+                audio.src = track.src;
+                progressBar.style.width = '0%';
+                currentTimeEl.textContent = '0:00';
+                durationEl.textContent = '0:00';
+            };
+
+            const playTrack = async () => {
+                try {
+                    await audio.play();
+                    isPlaying = true;
+                    playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                } catch (e) {
+                    console.warn('Unable to play audio', e);
+                }
+            };
+
+            const pauseTrack = () => {
+                audio.pause();
+                isPlaying = false;
+                playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+            };
+
+            const nextTrack = () => {
+                currentIndex = (currentIndex + 1) % playlist.length;
+                loadTrack(currentIndex);
+                playTrack();
+            };
+
+            const prevTrack = () => {
+                currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+                loadTrack(currentIndex);
+                playTrack();
+            };
+
+            playBtn.addEventListener('click', () => {
+                if (isPlaying) pauseTrack();
+                else playTrack();
+            });
+
+            prevBtn?.addEventListener('click', prevTrack);
+            nextBtn?.addEventListener('click', nextTrack);
+
+            audio.addEventListener('timeupdate', () => {
+                const progressValue = (audio.currentTime / (audio.duration || 1)) * 100;
+                progressBar.style.width = `${progressValue}%`;
+                currentTimeEl.textContent = formatTime(audio.currentTime);
+            });
+
+            audio.addEventListener('loadedmetadata', () => {
+                durationEl.textContent = formatTime(audio.duration);
+            });
+
+            audio.addEventListener('ended', nextTrack);
+
+            audio.addEventListener('error', () => {
+                titleEl.textContent = 'Track unavailable';
+                artistEl.textContent = 'Choose another track';
+                pauseTrack();
+            });
+
+            progress.addEventListener('click', (e) => {
+                if (!Number.isFinite(audio.duration)) return;
+                const rect = progress.getBoundingClientRect();
+                const percent = (e.clientX - rect.left) / rect.width;
+                audio.currentTime = percent * audio.duration;
+            });
+
+            loadTrack(currentIndex);
+
+            const syncWidgetVisibility = () => {
+                if (!window.Settings) return;
+                const enabled = Settings.get('miniplayer') !== false;
+                widget.style.display = enabled ? 'flex' : 'none';
+            };
+
+            syncWidgetVisibility();
+            window.addEventListener('settings-changed', syncWidgetVisibility);
         })();
 
 

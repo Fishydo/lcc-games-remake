@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings - Phantom</title>
+    <title>Settings - LCC Games</title>
     <link rel="icon" href="../favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="../styles/main.css">
@@ -24,7 +24,7 @@
         <div class="settings-container">
             <div class="settings-header">
                 <h1><i class="fa-solid fa-gear"></i> Settings</h1>
-                <p>Customize your Phantom experience</p>
+                <p>Customize your LCC Games experience</p>
             </div>
 
             <div class="settings-nav">
@@ -325,7 +325,7 @@
                     <h2 class="section-title"><i class="fa-solid fa-music"></i> Music</h2>
                     <div class="setting-row">
                         <div class="setting-info">
-                            <div class="setting-label">Show Mini Player (SOON) <span style="font-size: 0.75rem; color: var(--text-muted);">cough  never happening lowk cough</span></div>
+                            <div class="setting-label">Show Mini Player</div>
                         </div>
                         <div class="toggle active" id="miniplayer-toggle"></div>
                     </div>
@@ -335,7 +335,7 @@
                     <div class="setting-row">
                         <div class="setting-info">
                             <div class="setting-label">Show Changelog on Update</div>
-                            <div class="setting-desc">Automatically show changelog when Phantom is updated</div>
+                            <div class="setting-desc">Automatically show changelog when LCC Games is updated</div>
                         </div>
                         <div class="toggle active" id="changelog-toggle"></div>
                     </div>
@@ -358,6 +358,26 @@
                         </div>
                         <button class="btn btn-danger" id="reset-settings"><i class="fa-solid fa-rotate-left"></i>
                             Reset</button>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h2 class="section-title"><i class="fa-solid fa-cookie-bite"></i> Cookies</h2>
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <div class="setting-label">Export Cookies</div>
+                            <div class="setting-desc">Download all cookies for this site as a .lcc file</div>
+                        </div>
+                        <button class="btn btn-secondary" id="export-cookies"><i class="fa-solid fa-download"></i>
+                            Export</button>
+                    </div>
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <div class="setting-label">Import Cookies</div>
+                            <div class="setting-desc">Upload a .lcc cookie file and apply it to this site</div>
+                        </div>
+                        <input type="file" id="import-cookies-input" accept=".lcc,application/json" hidden>
+                        <button class="btn btn-secondary" id="import-cookies"><i class="fa-solid fa-upload"></i>
+                            Import</button>
                     </div>
                 </div>
             </div>
