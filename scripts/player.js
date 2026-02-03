@@ -76,7 +76,7 @@ document.getElementById('btn-fullscreen').onclick = () => frame.requestFullscree
 document.getElementById('btn-newtab').onclick = async () => {
     const win = window.open('about:blank', '_blank');
     if (!win) return;
-    let html = type === 'game' && !currentUrl.includes('staticsjv2/') ? await (await fetch(currentUrl)).text() : `<!DOCTYPE html><html><head><title>${title || 'Phantom'}</title><style>body{margin:0;background:#000;}</style></head><body><iframe src="${currentUrl}" style="position:fixed;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen></iframe></body></html>`;
+    let html = type === 'game' && !currentUrl.includes('staticsjv2/') ? await (await fetch(currentUrl)).text() : `<!DOCTYPE html><html><head><title>${title || 'LCC Games'}</title><style>body{margin:0;background:#000;}</style></head><body><iframe src="${currentUrl}" style="position:fixed;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen></iframe></body></html>`;
     if (window.Settings?.get('openIn') === 'blob') win.location.href = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
     else { win.document.write(html); win.document.close(); }
 };

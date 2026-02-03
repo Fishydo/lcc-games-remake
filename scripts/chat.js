@@ -38,7 +38,7 @@ class PhantomChat {
         this.startPlaceholderAnimation();
 
         if (window.Notify) {
-            Notify.success('Ready', 'Phantom AI is loaded');
+            Notify.success('Ready', 'LCC AI is loaded');
         }
     }
 
@@ -339,7 +339,7 @@ class PhantomChat {
 
         try {
             const messages = [
-                { role: 'system', content: 'You are Phantom AI, a helpful and knowledgeable assistant. Use Markdown formatting. Be concise but thorough.' },
+                { role: 'system', content: 'You are LCC AI, a helpful and knowledgeable assistant. Use Markdown formatting. Be concise but thorough.' },
                 ...conv.messages.slice(-10).map(m => ({
                     role: m.role === 'ai' ? 'assistant' : m.role,
                     content: m.content
@@ -410,7 +410,7 @@ class PhantomChat {
 
         if (!conv || !conv.messages.length) {
             this.dom.hero.style.display = 'block';
-            this.dom.title.textContent = 'Phantom AI';
+            this.dom.title.textContent = 'LCC AI';
         } else {
             this.dom.hero.style.display = 'none';
             this.dom.title.textContent = conv.title;
