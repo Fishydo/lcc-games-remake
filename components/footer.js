@@ -13,7 +13,7 @@
         }
     }
 
-    const config = window.SITE_CONFIG || { name: 'Phantom', version: '1.0.0', discord: { inviteUrl: '#' }, changelog: [], cloakPresets: [] };
+    const config = window.SITE_CONFIG || { name: 'LCC Games', version: '1.0.0', discord: { inviteUrl: '#' }, changelog: [], cloakPresets: [] };
     const STORAGE_KEY = 'void_settings';
     let storedSettings = {};
     try { storedSettings = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { }
@@ -68,7 +68,7 @@
             <a href="${rootPrefix}pages/disclaimer.html" class="footer-link">Disclaimer</a>
             <a href="${rootPrefix}pages/extra.html" class="footer-link">Credits</a>
         </div>
-        <span class="footer-version" id="footer-version">${config.name || 'Phantom'} v${config.version || '1.0.0'}</span>
+        <span class="footer-version" id="footer-version">${config.name || 'LCC Games'} v${config.version || '1.0.0'}</span>
     `;
 
     document.body.appendChild(footer);
