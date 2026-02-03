@@ -414,3 +414,72 @@ document.getElementById('reset-settings').onclick = () => {
     localStorage.removeItem(STORAGE_KEY);
     location.reload();
 };
+
+const exportCookiesBtn = document.getElementById('export-cookies');
+const importCookiesBtn = document.getElementById('import-cookies');
+const importCookiesInput = document.getElementById('import-cookies-input');
+
+const parseCookies = () => {
+    if (!document.cookie) return [];
+    return document.cookie.split('; ').map(pair => {
+        const idx = pair.indexOf('=');
+        const name = idx >= 0 ? pair.slice(0, idx) : pair;
+        const value = idx >= 0 ? pair.slice(idx + 1) : '';
+        return { name, value, path: '/', sameSite: 'Lax' };
+    });
+};
+
+const serializeCookie = (cookie) => {
+    const parts = [`${cookie.name}=${cookie.value}`];
+    if (cookie.path) parts.push(`path=${cookie.path}`);
+    if (cookie.domain) parts.push(`domain=${cookie.domain}`);
+    if (cookie.expires) parts.push(`expires=${cookie.expires}`);
+    if (cookie.maxAge) parts.push(`max-age=${cookie.maxAge}`);
+    if (cookie.sameSite) parts.push(`samesite=${cookie.sameSite}`);
+    if (cookie.secure) parts.push('secure');
+    return parts.join('; ');
+};
+
+if (exportCookiesBtn) {
+    exportCookiesBtn.onclick = () => {
+        const payload = {
+            version: 1,
+            exportedAt: new Date().toISOString(),
+            cookies: parseCookies()
+        };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'lcc-cookies.lcc';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        if (window.Notify) Notify.success('Cookies Exported', 'Download started.');
+    };
+}
+
+if (importCookiesBtn && importCookiesInput) {
+    importCookiesBtn.onclick = () => importCookiesInput.click();
+    importCookiesInput.onchange = async () => {
+        const file = importCookiesInput.files?.[0];
+        if (!file) return;
+        try {
+            const text = await file.text();
+            const data = JSON.parse(text);
+            const cookies = Array.isArray(data) ? data : data.cookies;
+            if (!Array.isArray(cookies)) throw new Error('Invalid cookie file');
+            cookies.forEach(cookie => {
+                if (!cookie.name) return;
+                document.cookie = serializeCookie(cookie);
+            });
+            if (window.Notify) Notify.success('Cookies Imported', 'Cookies applied to this site.');
+        } catch (e) {
+            console.error(e);
+            if (window.Notify) Notify.error('Import Failed', 'Unable to read cookie file.');
+        } finally {
+            importCookiesInput.value = '';
+        }
+    };
+}

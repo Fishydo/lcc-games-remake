@@ -325,7 +325,7 @@
                     <h2 class="section-title"><i class="fa-solid fa-music"></i> Music</h2>
                     <div class="setting-row">
                         <div class="setting-info">
-                            <div class="setting-label">Show Mini Player (SOON) <span style="font-size: 0.75rem; color: var(--text-muted);">cough  never happening lowk cough</span></div>
+                            <div class="setting-label">Show Mini Player</div>
                         </div>
                         <div class="toggle active" id="miniplayer-toggle"></div>
                     </div>
@@ -358,6 +358,26 @@
                         </div>
                         <button class="btn btn-danger" id="reset-settings"><i class="fa-solid fa-rotate-left"></i>
                             Reset</button>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h2 class="section-title"><i class="fa-solid fa-cookie-bite"></i> Cookies</h2>
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <div class="setting-label">Export Cookies</div>
+                            <div class="setting-desc">Download all cookies for this site as a .lcc file</div>
+                        </div>
+                        <button class="btn btn-secondary" id="export-cookies"><i class="fa-solid fa-download"></i>
+                            Export</button>
+                    </div>
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <div class="setting-label">Import Cookies</div>
+                            <div class="setting-desc">Upload a .lcc cookie file and apply it to this site</div>
+                        </div>
+                        <input type="file" id="import-cookies-input" accept=".lcc,application/json" hidden>
+                        <button class="btn btn-secondary" id="import-cookies"><i class="fa-solid fa-upload"></i>
+                            Import</button>
                     </div>
                 </div>
             </div>

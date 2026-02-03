@@ -68,8 +68,9 @@ window.SITE_CONFIG = {
         "**make the only song in music be lebron lebron lebron james**",
         "***finish extra page into credits and make this todo be tucked away somewhere and not the main part of it***"
     ],
-    defaultWisp: "wss://glseries.net/wisp/",
+    defaultWisp: "wss://lcc-fast.mooo.com/wisp/",
     wispServers: [
+        { name: "LCC Fast", url: "wss://lcc-fast.mooo.com/wisp/" },
         { name: "GLSeries Wisp", url: "wss://glseries.net/wisp/" },
         { name: "Rhw's Wisp", url: "wss://wisp.rhw.one/wisp/" },
     ],
@@ -151,4 +152,3 @@ window.SITE_CONFIG = {
         { name: "nothing", icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=", title: "\u200B" },
     ]
 }
-
