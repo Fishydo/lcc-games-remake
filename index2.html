@@ -394,6 +394,148 @@
             grid.appendChild(fragment);
         })();
 
+        // Music widget
+        (() => {
+            const playlist = [
+                {
+                    title: 'Skyline Drift',
+                    artist: 'LCC Sound',
+                    src: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_6f3297f0d1.mp3?filename=chill-ambient-11099.mp3',
+                    cover: 'https://images.unsplash.com/photo-1485579149621-3123dd979885?q=80&w=1200&auto=format&fit=crop'
+                },
+                {
+                    title: 'Arcade Pulse',
+                    artist: 'Night Grid',
+                    src: 'https://cdn.pixabay.com/download/audio/2022/10/30/audio_fa6cefe804.mp3?filename=cyberpunk-ambient-121317.mp3',
+                    cover: 'https://images.unsplash.com/photo-1520975682031-44f04d2dc5b7?q=80&w=1200&auto=format&fit=crop'
+                },
+                {
+                    title: 'Afterglow',
+                    artist: 'Neon Vista',
+                    src: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c32b602ac1.mp3?filename=ambient-10961.mp3',
+                    cover: 'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?q=80&w=1200&auto=format&fit=crop'
+                }
+            ];
+
+            const audio = document.getElementById('music-audio');
+            const playBtn = document.getElementById('music-play');
+            const prevBtn = document.getElementById('music-prev');
+            const nextBtn = document.getElementById('music-next');
+            const titleEl = document.getElementById('music-title');
+            const artistEl = document.getElementById('music-artist');
+            const coverEl = document.getElementById('music-cover');
+            const progress = document.getElementById('music-progress');
+            const progressBar = document.getElementById('music-progress-bar');
+            const currentTimeEl = document.getElementById('music-current');
+            const durationEl = document.getElementById('music-duration');
+            const queueEl = document.getElementById('music-queue');
+
+            if (!audio || !playBtn || !queueEl) return;
+
+            let currentIndex = 0;
+            let isPlaying = false;
+
+            const formatTime = (time) => {
+                if (!Number.isFinite(time)) return '0:00';
+                const minutes = Math.floor(time / 60);
+                const seconds = Math.floor(time % 60).toString().padStart(2, '0');
+                return `${minutes}:${seconds}`;
+            };
+
+            const renderQueue = () => {
+                queueEl.innerHTML = '';
+                playlist.forEach((track, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'music-queue-item' + (index === currentIndex ? ' active' : '');
+                    item.innerHTML = `<span>${track.title}</span><span>${track.artist}</span>`;
+                    item.onclick = () => {
+                        loadTrack(index);
+                        playTrack();
+                    };
+                    queueEl.appendChild(item);
+                });
+            };
+
+            const loadTrack = (index) => {
+                const track = playlist[index];
+                if (!track) return;
+                currentIndex = index;
+                titleEl.textContent = track.title;
+                artistEl.textContent = track.artist;
+                coverEl.src = track.cover;
+                audio.src = track.src;
+                progressBar.style.width = '0%';
+                currentTimeEl.textContent = '0:00';
+                durationEl.textContent = '0:00';
+                renderQueue();
+            };
+
+            const playTrack = async () => {
+                try {
+                    await audio.play();
+                    isPlaying = true;
+                    playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                } catch (e) {
+                    console.warn('Unable to play audio', e);
+                }
+            };
+
+            const pauseTrack = () => {
+                audio.pause();
+                isPlaying = false;
+                playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+            };
+
+            const nextTrack = () => {
+                currentIndex = (currentIndex + 1) % playlist.length;
+                loadTrack(currentIndex);
+                playTrack();
+            };
+
+            const prevTrack = () => {
+                currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+                loadTrack(currentIndex);
+                playTrack();
+            };
+
+            playBtn.addEventListener('click', () => {
+                if (isPlaying) pauseTrack();
+                else playTrack();
+            });
+
+            prevBtn?.addEventListener('click', prevTrack);
+            nextBtn?.addEventListener('click', nextTrack);
+
+            audio.addEventListener('timeupdate', () => {
+                const progressValue = (audio.currentTime / (audio.duration || 1)) * 100;
+                progressBar.style.width = `${progressValue}%`;
+                currentTimeEl.textContent = formatTime(audio.currentTime);
+            });
+
+            audio.addEventListener('loadedmetadata', () => {
+                durationEl.textContent = formatTime(audio.duration);
+            });
+
+            audio.addEventListener('ended', nextTrack);
+
+            audio.addEventListener('error', () => {
+                titleEl.textContent = 'Track unavailable';
+                artistEl.textContent = 'Choose another track';
+                pauseTrack();
+            });
+
+            progress.addEventListener('click', (e) => {
+                if (!Number.isFinite(audio.duration)) return;
+                const rect = progress.getBoundingClientRect();
+                const percent = (e.clientX - rect.left) / rect.width;
+                audio.currentTime = percent * audio.duration;
+            });
+
+            loadTrack(currentIndex);
+            renderQueue();
+        })();
+
+
         // Theme notification
         window.addEventListener('load', () => {
             setTimeout(() => {
