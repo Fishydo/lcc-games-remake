@@ -284,8 +284,6 @@ const mods = settings.panicModifiers || window.SITE_CONFIG?.defaults?.panicModif
 const key = settings.panicKey || window.SITE_CONFIG?.defaults?.panicKey || 'x';
 document.getElementById('panic-key').textContent = mods.map(m => m.charAt(0).toUpperCase() + m.slice(1)).join(' + ') + ' + ' + key;
 
-if (settings.discordWidget !== false) document.getElementById('discord-toggle').classList.add('active');
-else document.getElementById('discord-toggle').classList.remove('active');
 if (settings.miniplayer !== false) document.getElementById('miniplayer-toggle').classList.add('active');
 else document.getElementById('miniplayer-toggle').classList.remove('active');
 if (settings.leaveConfirmation) document.getElementById('leave-confirm-toggle').classList.add('active');
@@ -297,6 +295,10 @@ if (settings.autoSwitchProviders !== false) document.getElementById('autoswitch-
 else document.getElementById('autoswitch-toggle').classList.remove('active');
 if (settings.backgroundRotation) document.getElementById('background-rotation-toggle').classList.add('active');
 else document.getElementById('background-rotation-toggle').classList.remove('active');
+if (settings.fogBackground) document.getElementById('fog-toggle').classList.add('active');
+else document.getElementById('fog-toggle').classList.remove('active');
+if (settings.reduceBlur) document.getElementById('reduce-blur-toggle').classList.add('active');
+else document.getElementById('reduce-blur-toggle').classList.remove('active');
 
 // Rotating Cloaks
 if (settings.rotateCloaks) {
@@ -325,13 +327,14 @@ document.getElementById('border-color').oninput = e => { settings.borderColor = 
 document.getElementById('border-light-color').oninput = e => { settings.borderLightColor = e.target.value; saveSettings(settings); };
 document.getElementById('max-rating').onchange = e => { settings.maxMovieRating = e.target.value; saveSettings(settings); };
 document.getElementById('game-library').onchange = e => { settings.gameLibrary = e.target.value; saveSettings(settings); };
-document.getElementById('discord-toggle').onclick = function () { this.classList.toggle('active'); settings.discordWidget = this.classList.contains('active'); saveSettings(settings); };
 document.getElementById('miniplayer-toggle').onclick = function () { this.classList.toggle('active'); settings.miniplayer = this.classList.contains('active'); saveSettings(settings); };
 document.getElementById('leave-confirm-toggle').onclick = function () { this.classList.toggle('active'); settings.leaveConfirmation = this.classList.contains('active'); saveSettings(settings); };
 document.getElementById('changelog-toggle').onclick = function () { this.classList.toggle('active'); settings.showChangelogOnUpdate = this.classList.contains('active'); saveSettings(settings); };
 document.getElementById('theme-rotation-toggle').onclick = function () { this.classList.toggle('active'); settings.themeRotation = this.classList.contains('active'); saveSettings(settings); };
 document.getElementById('autoswitch-toggle').onclick = function () { this.classList.toggle('active'); settings.autoSwitchProviders = this.classList.contains('active'); saveSettings(settings); };
 document.getElementById('background-rotation-toggle').onclick = function () { this.classList.toggle('active'); settings.backgroundRotation = this.classList.contains('active'); saveSettings(settings); };
+document.getElementById('fog-toggle').onclick = function () { this.classList.toggle('active'); settings.fogBackground = this.classList.contains('active'); saveSettings(settings); };
+document.getElementById('reduce-blur-toggle').onclick = function () { this.classList.toggle('active'); settings.reduceBlur = this.classList.contains('active'); saveSettings(settings); };
 
 document.getElementById('rotate-toggle').onclick = function () {
     this.classList.toggle('active');
@@ -414,3 +417,240 @@ document.getElementById('reset-settings').onclick = () => {
     localStorage.removeItem(STORAGE_KEY);
     location.reload();
 };
+
+const exportCookiesBtn = document.getElementById('export-cookies');
+const importCookiesBtn = document.getElementById('import-cookies');
+const importCookiesInput = document.getElementById('import-cookies-input');
+
+const parseCookies = () => {
+    if (!document.cookie) return [];
+    return document.cookie.split('; ').map(pair => {
+        const idx = pair.indexOf('=');
+        const name = idx >= 0 ? pair.slice(0, idx) : pair;
+        const value = idx >= 0 ? pair.slice(idx + 1) : '';
+        return { name, value, path: '/', sameSite: 'Lax' };
+    });
+};
+
+const serializeCookie = (cookie) => {
+    const parts = [`${cookie.name}=${cookie.value}`];
+    if (cookie.path) parts.push(`path=${cookie.path}`);
+    if (cookie.domain) parts.push(`domain=${cookie.domain}`);
+    if (cookie.expires) parts.push(`expires=${cookie.expires}`);
+    if (cookie.maxAge) parts.push(`max-age=${cookie.maxAge}`);
+    if (cookie.sameSite) parts.push(`samesite=${cookie.sameSite}`);
+    if (cookie.secure) parts.push('secure');
+    return parts.join('; ');
+};
+
+const arrayBufferToBase64 = (buffer) => {
+    const bytes = new Uint8Array(buffer);
+    let binary = '';
+    const chunkSize = 8192;
+    for (let i = 0; i < bytes.length; i += chunkSize) {
+        binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+    }
+    return btoa(binary);
+};
+
+if (exportCookiesBtn) {
+    exportCookiesBtn.onclick = async () => {
+        const localData = {};
+        const sessionData = {};
+        for (let i = 0; i < localStorage.length; i += 1) {
+            const key = localStorage.key(i);
+            if (key) localData[key] = localStorage.getItem(key);
+        }
+        for (let i = 0; i < sessionStorage.length; i += 1) {
+            const key = sessionStorage.key(i);
+            if (key) sessionData[key] = sessionStorage.getItem(key);
+        }
+
+        const dbList = indexedDB.databases ? await indexedDB.databases() : [];
+        const indexedData = [];
+
+        const openDb = (name) => new Promise((resolve, reject) => {
+            const request = indexedDB.open(name);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+
+        const readStore = (db, storeName) => new Promise((resolve) => {
+            const tx = db.transaction(storeName, 'readonly');
+            const store = tx.objectStore(storeName);
+            const info = {
+                name: storeName,
+                keyPath: store.keyPath,
+                autoIncrement: store.autoIncrement,
+                indexes: Array.from(store.indexNames).map(indexName => {
+                    const index = store.index(indexName);
+                    return { name: indexName, keyPath: index.keyPath, unique: index.unique, multiEntry: index.multiEntry };
+                })
+            };
+            const dataRequest = store.getAll();
+            const keyRequest = store.getAllKeys();
+            Promise.all([
+                new Promise(res => { dataRequest.onsuccess = () => res(dataRequest.result || []); dataRequest.onerror = () => res([]); }),
+                new Promise(res => { keyRequest.onsuccess = () => res(keyRequest.result || []); keyRequest.onerror = () => res([]); })
+            ]).then(([values, keys]) => {
+                const records = values.map((value, idx) => ({ key: keys[idx], value }));
+                resolve({ ...info, records });
+            });
+        });
+
+        for (const dbInfo of dbList) {
+            if (!dbInfo.name) continue;
+            try {
+                const db = await openDb(dbInfo.name);
+                const stores = [];
+                for (const storeName of db.objectStoreNames) {
+                    const storeData = await readStore(db, storeName);
+                    stores.push(storeData);
+                }
+                indexedData.push({ name: dbInfo.name, version: db.version, stores });
+                db.close();
+            } catch (e) {
+                indexedData.push({ name: dbInfo.name, version: dbInfo.version || 1, stores: [] });
+            }
+        }
+
+        const cachesData = [];
+        if ('caches' in window) {
+            const cacheNames = await caches.keys();
+            for (const cacheName of cacheNames) {
+                const cache = await caches.open(cacheName);
+                const requests = await cache.keys();
+                const entries = [];
+                for (const request of requests) {
+                    const response = await cache.match(request);
+                    if (!response) continue;
+                    const buffer = await response.arrayBuffer();
+                    const base64 = arrayBufferToBase64(buffer);
+                    const headers = {};
+                    response.headers.forEach((value, key) => { headers[key] = value; });
+                    entries.push({
+                        url: request.url,
+                        method: request.method || 'GET',
+                        status: response.status,
+                        statusText: response.statusText,
+                        headers,
+                        body: base64
+                    });
+                }
+                cachesData.push({ name: cacheName, entries });
+            }
+        }
+
+        const payload = {
+            version: 2,
+            exportedAt: new Date().toISOString(),
+            cookies: parseCookies(),
+            localStorage: localData,
+            sessionStorage: sessionData,
+            indexedDB: indexedData,
+            cacheStorage: cachesData,
+            fileSystemAccess: false
+        };
+
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'lcc-data.lcc';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        if (window.Notify) Notify.success('Data Exported', 'Download started.');
+    };
+}
+
+if (importCookiesBtn && importCookiesInput) {
+    importCookiesBtn.onclick = () => importCookiesInput.click();
+    importCookiesInput.onchange = async () => {
+        const file = importCookiesInput.files?.[0];
+        if (!file) return;
+        try {
+            const text = await file.text();
+            const data = JSON.parse(text);
+            const cookies = Array.isArray(data) ? data : data.cookies;
+            if (!Array.isArray(cookies)) throw new Error('Invalid cookie file');
+            cookies.forEach(cookie => {
+                if (!cookie.name) return;
+                document.cookie = serializeCookie(cookie);
+            });
+            if (data.localStorage) {
+                Object.entries(data.localStorage).forEach(([key, value]) => {
+                    localStorage.setItem(key, value);
+                });
+            }
+            if (data.sessionStorage) {
+                Object.entries(data.sessionStorage).forEach(([key, value]) => {
+                    sessionStorage.setItem(key, value);
+                });
+            }
+            if (data.indexedDB && indexedDB.databases) {
+                for (const dbInfo of data.indexedDB) {
+                    if (!dbInfo.name) continue;
+                    await new Promise(res => {
+                        const req = indexedDB.deleteDatabase(dbInfo.name);
+                        req.onsuccess = () => res();
+                        req.onerror = () => res();
+                        req.onblocked = () => res();
+                    });
+                    await new Promise((resolve, reject) => {
+                        const request = indexedDB.open(dbInfo.name, dbInfo.version || 1);
+                        request.onupgradeneeded = () => {
+                            const db = request.result;
+                            dbInfo.stores.forEach(storeInfo => {
+                                if (db.objectStoreNames.contains(storeInfo.name)) return;
+                                const store = db.createObjectStore(storeInfo.name, {
+                                    keyPath: storeInfo.keyPath || undefined,
+                                    autoIncrement: storeInfo.autoIncrement
+                                });
+                                (storeInfo.indexes || []).forEach(index => {
+                                    store.createIndex(index.name, index.keyPath, { unique: index.unique, multiEntry: index.multiEntry });
+                                });
+                            });
+                        };
+                        request.onsuccess = () => {
+                            const db = request.result;
+                            dbInfo.stores.forEach(storeInfo => {
+                                if (!db.objectStoreNames.contains(storeInfo.name)) return;
+                                const tx = db.transaction(storeInfo.name, 'readwrite');
+                                const store = tx.objectStore(storeInfo.name);
+                                (storeInfo.records || []).forEach(record => {
+                                    if (record.key !== undefined) store.put(record.value, record.key);
+                                    else store.put(record.value);
+                                });
+                            });
+                            db.close();
+                            resolve();
+                        };
+                        request.onerror = () => reject(request.error);
+                    });
+                }
+            }
+            if (data.cacheStorage && 'caches' in window) {
+                for (const cacheInfo of data.cacheStorage) {
+                    const cache = await caches.open(cacheInfo.name);
+                    for (const entry of cacheInfo.entries || []) {
+                        const binary = Uint8Array.from(atob(entry.body || ''), c => c.charCodeAt(0));
+                        const response = new Response(binary, {
+                            status: entry.status,
+                            statusText: entry.statusText,
+                            headers: entry.headers
+                        });
+                        await cache.put(entry.url, response);
+                    }
+                }
+            }
+            if (window.Notify) Notify.success('Data Imported', 'Data restored to this site.');
+        } catch (e) {
+            console.error(e);
+            if (window.Notify) Notify.error('Import Failed', 'Unable to read data file.');
+        } finally {
+            importCookiesInput.value = '';
+        }
+    };
+}

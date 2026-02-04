@@ -16,10 +16,12 @@
     <script src="../scripts/settings.js"></script>
     <link rel="stylesheet" href="../styles/main.css">
     <link rel="stylesheet" href="../styles/background.css">
+    <link rel="stylesheet" href="../components/topbar.css">
     <link rel="stylesheet" href="style.css">
 
     <script src="../scripts/background.js"></script>
     <script src="../scripts/notifications.js"></script>
+    <script src="../components/topbar.js"></script>
     <script src="./script.js" defer></script>
     <style>
 
@@ -50,6 +52,20 @@
                 <div id="proxy-panel" class="settings-panel active">
                     <div class="section-title"><i class="fa-solid fa-cloud"></i> Select Server</div>
                     <div class="server-list" id="server-list"></div>
+                    <div class="section-title"><i class="fa-solid fa-shield"></i> Ad Block</div>
+                    <div class="wisp-option">
+                        <div class="wisp-option-header">
+                            <div class="wisp-option-name">Block ads & trackers</div>
+                            <div class="toggle" id="adblock-toggle"></div>
+                        </div>
+                    </div>
+                    <div class="section-title"><i class="fa-solid fa-route"></i> Proxy Direction</div>
+                    <div class="wisp-option">
+                        <div class="wisp-option-header">
+                            <div class="wisp-option-name">Route through proxy</div>
+                            <div class="toggle" id="proxy-direction-toggle"></div>
+                        </div>
+                    </div>
                     <div class="section-title"><i class="fa-solid fa-plus-circle"></i> Custom Server</div>
                     <div class="custom-input-group">
                         <input type="text" id="custom-wisp-input" placeholder="wss://your-wisp-server.com/wisp/">
