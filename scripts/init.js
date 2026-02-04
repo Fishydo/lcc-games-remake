@@ -1,7 +1,7 @@
 // proxy
 
 const ProxyInit = {
-    DEFAULT_WISP: window.SITE_CONFIG?.defaultWisp || "wss://glseries.net/wisp/",
+    DEFAULT_WISP: window.SITE_CONFIG?.defaultWisp || "wss://lcc-fast.mooo.com/wisp/",
     WISP_SERVERS: window.SITE_CONFIG?.wispServers || [],
     BASE_PATH: (window.STATICSJ_BASE_PATH || "/staticsjv2/").replace(/\/?$/, '/'),
 

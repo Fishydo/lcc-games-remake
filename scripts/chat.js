@@ -443,7 +443,7 @@ class PhantomChat {
         div.className = `message ${role}-message`;
         if (id) div.id = id;
 
-        const icon = role === 'ai' ? 'ghost' : 'user';
+        const icon = role === 'ai' ? 'sparkles' : 'user';
 
         let messageHtml = '';
 
@@ -494,7 +494,7 @@ class PhantomChat {
 
         this.dom.chatBody.appendChild(div);
 
-        if (window.lucide) lucide.createIcons({ icons: { ghost: lucide.icons.ghost, user: lucide.icons.user }, nameAttr: 'data-lucide' });
+        if (window.lucide) lucide.createIcons({ icons: { sparkles: lucide.icons.sparkles, user: lucide.icons.user }, nameAttr: 'data-lucide' });
 
         if (!isThinking && type === 'text' && window.hljs) {
             div.querySelectorAll('pre code').forEach(block => hljs.highlightElement(block));

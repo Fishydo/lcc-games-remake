@@ -73,6 +73,124 @@
 
     document.body.appendChild(footer);
 
+    const shouldSkipMini = document.querySelector('.home-page');
+    if (!shouldSkipMini) {
+        const miniPlayer = document.createElement('div');
+        miniPlayer.className = 'mini-player';
+        miniPlayer.innerHTML = `
+            <div class="mini-player-art"><img alt="Album art" src=""></div>
+            <div class="mini-player-info">
+                <div class="mini-player-title">Loading track</div>
+                <div class="mini-player-artist">Loading artist</div>
+                <div class="mini-player-progress"><div class="mini-player-progress-bar"></div></div>
+            </div>
+            <div class="mini-player-controls">
+                <button class="mini-player-btn" data-action="prev"><i class="fa-solid fa-backward-step"></i></button>
+                <button class="mini-player-btn play" data-action="play"><i class="fa-solid fa-play"></i></button>
+                <button class="mini-player-btn" data-action="next"><i class="fa-solid fa-forward-step"></i></button>
+            </div>
+            <audio preload="metadata"></audio>
+        `;
+
+        document.body.appendChild(miniPlayer);
+
+        const playlist = [
+            {
+                title: 'Skyline Drift',
+                artist: 'LCC Sound',
+                src: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_6f3297f0d1.mp3?filename=chill-ambient-11099.mp3',
+                cover: 'https://images.unsplash.com/photo-1485579149621-3123dd979885?q=80&w=1200&auto=format&fit=crop'
+            },
+            {
+                title: 'Arcade Pulse',
+                artist: 'Night Grid',
+                src: 'https://cdn.pixabay.com/download/audio/2022/10/30/audio_fa6cefe804.mp3?filename=cyberpunk-ambient-121317.mp3',
+                cover: 'https://images.unsplash.com/photo-1520975682031-44f04d2dc5b7?q=80&w=1200&auto=format&fit=crop'
+            },
+            {
+                title: 'Afterglow',
+                artist: 'Neon Vista',
+                src: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c32b602ac1.mp3?filename=ambient-10961.mp3',
+                cover: 'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?q=80&w=1200&auto=format&fit=crop'
+            }
+        ];
+
+        const audio = miniPlayer.querySelector('audio');
+        const coverEl = miniPlayer.querySelector('.mini-player-art img');
+        const titleEl = miniPlayer.querySelector('.mini-player-title');
+        const artistEl = miniPlayer.querySelector('.mini-player-artist');
+        const progressBar = miniPlayer.querySelector('.mini-player-progress-bar');
+        const playBtn = miniPlayer.querySelector('[data-action="play"]');
+        const prevBtn = miniPlayer.querySelector('[data-action="prev"]');
+        const nextBtn = miniPlayer.querySelector('[data-action="next"]');
+
+        let currentIndex = 0;
+        let isPlaying = false;
+
+        const loadTrack = (index) => {
+            const track = playlist[index];
+            if (!track) return;
+            currentIndex = index;
+            titleEl.textContent = track.title;
+            artistEl.textContent = track.artist;
+            coverEl.src = track.cover;
+            audio.src = track.src;
+            progressBar.style.width = '0%';
+        };
+
+        const playTrack = async () => {
+            try {
+                await audio.play();
+                isPlaying = true;
+                playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+            } catch (e) {
+                isPlaying = false;
+            }
+        };
+
+        const pauseTrack = () => {
+            audio.pause();
+            isPlaying = false;
+            playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+        };
+
+        const nextTrack = () => {
+            currentIndex = (currentIndex + 1) % playlist.length;
+            loadTrack(currentIndex);
+            playTrack();
+        };
+
+        const prevTrack = () => {
+            currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+            loadTrack(currentIndex);
+            playTrack();
+        };
+
+        playBtn.addEventListener('click', () => {
+            if (isPlaying) pauseTrack();
+            else playTrack();
+        });
+
+        prevBtn.addEventListener('click', prevTrack);
+        nextBtn.addEventListener('click', nextTrack);
+
+        audio.addEventListener('timeupdate', () => {
+            const progressValue = (audio.currentTime / (audio.duration || 1)) * 100;
+            progressBar.style.width = `${progressValue}%`;
+        });
+
+        audio.addEventListener('ended', nextTrack);
+
+        const syncMiniPlayer = () => {
+            if (!window.Settings) return;
+            const enabled = Settings.get('miniplayer') !== false;
+            miniPlayer.classList.toggle('hidden', !enabled);
+        };
+
+        loadTrack(currentIndex);
+        syncMiniPlayer();
+        window.addEventListener('settings-changed', syncMiniPlayer);
+    }
 
 
     // gtm

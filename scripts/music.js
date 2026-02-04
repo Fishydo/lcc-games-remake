@@ -376,10 +376,11 @@ function loadVid(videoId) {
 
 // --- Player Implementation ---
 window.onYouTubeIframeAPIReady = () => {
-    player = new YT.Player('fallbackContainer', { // We use fallbackContainer as a holder first, but mapped to a specific div usually
+    player = new YT.Player('fallbackContainer', {
         height: '100%',
         width: '100%',
         videoId: '',
+        host: 'https://www.youtube-nocookie.com',
         playerVars: {
             'autoplay': 1,
             'controls': 0,
@@ -439,7 +440,7 @@ function useFallbackPlayer(videoId) {
     frame.style.width = '100%';
     frame.style.height = '100%';
     frame.allow = "autoplay; encrypted-media; picture-in-picture";
-    frame.src = PROXY_BASE + videoId;
+    frame.src = isProxyMode ? PROXY_BASE + videoId : `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&controls=0&rel=0&playsinline=1`;
 
     fallbackContainer.appendChild(frame);
     fallbackContainer.classList.add('show');
