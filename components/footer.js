@@ -13,13 +13,14 @@
         }
     }
 
-    const config = window.SITE_CONFIG || { name: 'Phantom', version: '1.0.0', discord: { inviteUrl: '#' }, changelog: [], cloakPresets: [] };
+    const config = window.SITE_CONFIG || { name: 'LCC Games', version: '1.0.0', discord: { inviteUrl: '#' }, changelog: [], cloakPresets: [] };
     const STORAGE_KEY = 'void_settings';
     let storedSettings = {};
     try { storedSettings = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { }
 
     // settings
     let settings = { ...(config.defaults || {}), ...storedSettings };
+    settings.discordWidget = false;
 
     const footer = document.createElement('footer');
     footer.id = 'site-footer';
@@ -68,11 +69,118 @@
             <a href="${rootPrefix}pages/disclaimer.html" class="footer-link">Disclaimer</a>
             <a href="${rootPrefix}pages/extra.html" class="footer-link">Credits</a>
         </div>
-        <span class="footer-version" id="footer-version">${config.name || 'Phantom'} v${config.version || '1.0.0'}</span>
+        <span class="footer-version" id="footer-version">${config.name || 'LCC Games'} v${config.version || '1.0.0'}</span>
     `;
 
     document.body.appendChild(footer);
 
+    const shouldSkipMini = document.querySelector('.home-page');
+    if (!shouldSkipMini) {
+        const MINI_PLAYER_KEY = 'lcc_music_state';
+        const MINI_PLAYER_COMMAND = 'lcc_music_command';
+
+        const miniPlayer = document.createElement('div');
+        miniPlayer.className = 'mini-player';
+        miniPlayer.innerHTML = `
+            <div class="mini-player-art"><img alt="Album art" src=""><span class="mini-player-placeholder">No song</span></div>
+            <div class="mini-player-info">
+                <div class="mini-player-title">Open Music</div>
+                <div class="mini-player-artist">No track playing</div>
+                <div class="mini-player-progress"><div class="mini-player-progress-bar"></div></div>
+            </div>
+            <div class="mini-player-controls">
+                <button class="mini-player-btn" data-action="prev"><i class="fa-solid fa-backward-step"></i></button>
+                <button class="mini-player-btn play" data-action="play"><i class="fa-solid fa-play"></i></button>
+                <button class="mini-player-btn" data-action="next"><i class="fa-solid fa-forward-step"></i></button>
+            </div>
+        `;
+
+        document.body.appendChild(miniPlayer);
+
+        const coverEl = miniPlayer.querySelector('.mini-player-art img');
+        const titleEl = miniPlayer.querySelector('.mini-player-title');
+        const artistEl = miniPlayer.querySelector('.mini-player-artist');
+        const progressBar = miniPlayer.querySelector('.mini-player-progress-bar');
+        const playBtn = miniPlayer.querySelector('[data-action="play"]');
+        const prevBtn = miniPlayer.querySelector('[data-action="prev"]');
+        const nextBtn = miniPlayer.querySelector('[data-action="next"]');
+        let currentState = null;
+
+        const applyState = (state) => {
+            currentState = state || null;
+            const hasTrack = Boolean(state?.title && state?.active && state?.isPlaying);
+            titleEl.textContent = hasTrack ? state.title : 'Open Music';
+            artistEl.textContent = hasTrack ? state.artist : 'No track playing';
+            coverEl.src = hasTrack ? (state.artwork || '') : '';
+            miniPlayer.classList.toggle('empty', !hasTrack);
+            const progress = state?.duration ? (state.currentTime / state.duration) * 100 : 0;
+            progressBar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+            playBtn.innerHTML = state?.isPlaying ? '<i class="fa-solid fa-pause"></i>' : '<i class="fa-solid fa-play"></i>';
+        };
+
+        const readState = () => {
+            const raw = localStorage.getItem(MINI_PLAYER_KEY);
+            if (!raw) return applyState(null);
+            try {
+                const state = JSON.parse(raw);
+                applyState(state);
+            } catch { }
+        };
+
+        const sendCommand = (action) => {
+            if (typeof window.lccMiniPlayerCommand === 'function') {
+                window.lccMiniPlayerCommand(action);
+            }
+            const payload = { action, origin: 'mini-player', ts: Date.now() };
+            localStorage.setItem(MINI_PLAYER_COMMAND, JSON.stringify(payload));
+        };
+
+        playBtn.addEventListener('click', () => {
+            if (!currentState?.active) {
+                window.location.href = `${rootPrefix}pages/music.html`;
+                return;
+            }
+            sendCommand('toggle');
+        });
+        prevBtn.addEventListener('click', () => sendCommand('prev'));
+        nextBtn.addEventListener('click', () => sendCommand('next'));
+
+        const syncMiniPlayer = () => {
+            if (!window.Settings) return;
+            const enabled = Settings.get('miniplayer') !== false;
+            miniPlayer.classList.toggle('hidden', !enabled);
+        };
+
+        const updateShift = () => {
+            const hasWidget = !!document.querySelector('iframe[src*="widgetbot"]') || !!document.querySelector('.widgetbot-crate') || !!document.querySelector('widgetbot-crate');
+            const shouldShift = settings.discordWidget !== false && hasWidget;
+            miniPlayer.classList.toggle('shifted', shouldShift);
+        };
+
+        readState();
+        syncMiniPlayer();
+        updateShift();
+
+        window.addEventListener('settings-changed', (e) => {
+            settings = e.detail;
+            syncMiniPlayer();
+            updateShift();
+        });
+        window.addEventListener('storage', (e) => {
+            if (e.key === MINI_PLAYER_KEY) readState();
+            if (e.key === STORAGE_KEY) {
+                try { settings = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { }
+                syncMiniPlayer();
+                updateShift();
+            }
+        });
+        window.addEventListener('lcc-mini-state', (e) => {
+            applyState(e.detail);
+        });
+
+        const observer = new MutationObserver(updateShift);
+        observer.observe(document.body, { childList: true, subtree: true });
+    }
 
 
     // gtm

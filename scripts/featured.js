@@ -3,7 +3,7 @@ const FeaturedGames = {
         { name: 'Fortnite', icon: 'fa-solid fa-crosshairs', url: 'pages/player.html?type=game&title=Fortnite&url=https://nowgg.fun/apps/aptoide/5874/aptoide.html?deep_link=aptoidesearch://com.epicgames.fortnite' },
         { name: 'Games', icon: 'fa-solid fa-gamepad', url: 'pages/games.html' },
         { name: 'Movies', icon: 'fa-solid fa-film', url: 'pages/movies.html' },
-        { name: 'PhantomAI', icon: 'fa-solid fa-robot', url: 'pages/chat.html' },
+        { name: 'LCC AI', icon: 'fa-solid fa-robot', url: 'pages/chat.html' },
         { name: 'Music', icon: 'fa-solid fa-music', url: 'pages/music.html' },
         { name: 'Roblox', icon: 'fa-solid fa-cubes', url: 'pages/player.html?type=game&title=Roblox&url=https://nowgg.fun/apps/aptoide/5874/aptoide.html?deep_link=aptoidesearch://roblox.com.roblox' },
         { name: 'Settings', icon: 'fa-solid fa-cog', url: 'pages/settings.html' },
