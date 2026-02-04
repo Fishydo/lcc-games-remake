@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phantom Unblocked</title>
+    <title>LCC Games Hub</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="styles/main.css">
@@ -29,17 +29,18 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 80px 24px 40px;
-            text-align: center;
+            justify-content: flex-start;
+            padding: 96px 24px 56px;
+            text-align: left;
+            gap: 32px;
         }
 
         .site-title {
-            font-size: 2.5rem;
+            font-size: 2.75rem;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             letter-spacing: -0.02em;
-            background: linear-gradient(90deg, #e4e4e7 0%, #a1a1aa 40%, #52525b 100%);
+            background: linear-gradient(120deg, #38bdf8 0%, #22d3ee 45%, #a78bfa 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -48,15 +49,102 @@
         .site-subtitle {
             font-size: 1rem;
             color: var(--text-muted);
-            margin-bottom: 32px;
+            margin-bottom: 20px;
             min-height: 24px;
+        }
+
+        .hero-grid {
+            width: 100%;
+            max-width: 1100px;
+            display: grid;
+            grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+            gap: 24px;
+            align-items: stretch;
+        }
+
+        .hero-card {
+            background: linear-gradient(140deg, rgba(56, 189, 248, 0.08), rgba(167, 139, 250, 0.08));
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .hero-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            background: rgba(56, 189, 248, 0.12);
+            color: #bae6fd;
+            margin-bottom: 16px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+
+        .hero-actions a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .primary-action {
+            background: linear-gradient(120deg, #38bdf8, #6366f1);
+            color: #0f172a;
+        }
+
+        .secondary-action {
+            border: 1px solid var(--border);
+            color: var(--text);
+            background: var(--surface);
+        }
+
+        .hero-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .metric-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 14px 16px;
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .metric-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 4px;
         }
 
         /* Search Bar */
         .search-container {
             width: 100%;
-            max-width: 500px;
-            margin-bottom: 48px;
+            max-width: 720px;
+            margin-bottom: 8px;
         }
 
         .search-bar {
@@ -100,7 +188,7 @@
         /* Featured Section */
         .featured-section {
             width: 100%;
-            max-width: 800px;
+            max-width: 960px;
         }
 
         .section-header {
@@ -179,9 +267,15 @@
 
 
 
+        @media (max-width: 960px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         @media (max-width: 640px) {
             .site-title {
-                font-size: 1.75rem;
+                font-size: 2rem;
             }
 
             .featured-grid {
@@ -189,7 +283,10 @@
                 gap: 8px;
             }
 
-
+            .hero-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
         }
     </style>
     <script src="config.js"></script>
@@ -220,8 +317,34 @@
         <script src="components/topbar.js"></script>
 
         <main class="main-content">
-            <h1 class="site-title">Phantom Unblocked</h1>
-            <p class="site-subtitle" id="subtitle"></p>
+            <div class="hero-grid">
+                <section class="hero-card">
+                    <div class="hero-pill"><i class="fa-solid fa-bolt"></i> LCC Games</div>
+                    <h1 class="site-title">LCC Games Hub</h1>
+                    <p class="site-subtitle" id="subtitle"></p>
+                    <p class="text-sm">Your new launchpad for games, streaming, AI, and browser tools — reimagined with a sharper
+                        look.</p>
+                    <div class="hero-actions">
+                        <a class="primary-action" href="pages/games.html"><i class="fa-solid fa-gamepad"></i> Explore Games</a>
+                        <a class="secondary-action" href="pages/music.html"><i class="fa-solid fa-music"></i> Open Music</a>
+                    </div>
+                    <div class="hero-metrics">
+                        <div class="metric-card">
+                            <div class="metric-label">Theme</div>
+                            <div class="metric-value">LCC Neon</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Status</div>
+                            <div class="metric-value">All Systems Ready</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Shortcuts</div>
+                            <div class="metric-value">10+ Quick Links</div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
 
             <!-- Search Bar -->
             <div class="search-container">
@@ -270,8 +393,6 @@
             });
             grid.appendChild(fragment);
         })();
-
-
 
         // Theme notification
         window.addEventListener('load', () => {

@@ -93,6 +93,72 @@
                 if (val) root.style.setProperty(key, val);
             });
 
+            if (s.reduceBlur) root.setAttribute('data-reduce-blur', 'true');
+            else root.removeAttribute('data-reduce-blur');
+
+            const ensureScript = (src) => new Promise((resolve, reject) => {
+                if (document.querySelector(`script[src="${src}"]`)) return resolve();
+                const script = document.createElement('script');
+                script.src = src;
+                script.onload = () => resolve();
+                script.onerror = () => reject(new Error('Script load failed'));
+                document.head.appendChild(script);
+            });
+
+            const parseColor = (value) => {
+                if (!value) return 0x000000;
+                const hex = value.trim();
+                if (hex.startsWith('#')) {
+                    const clean = hex.slice(1);
+                    const full = clean.length === 3 ? clean.split('').map(c => c + c).join('') : clean;
+                    return parseInt(full, 16);
+                }
+                const rgb = hex.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+                if (rgb) {
+                    return (parseInt(rgb[1]) << 16) + (parseInt(rgb[2]) << 8) + parseInt(rgb[3]);
+                }
+                return 0x000000;
+            };
+
+            const applyFog = async () => {
+                if (!s.fogBackground) {
+                    if (window.VANTA && window.VANTA.FOG && window.vantaFogInstance) {
+                        window.vantaFogInstance.destroy();
+                        window.vantaFogInstance = null;
+                    }
+                    return;
+                }
+
+                try {
+                    await ensureScript('https://cdn.jsdelivr.net/npm/three@0.134.0/build/three.min.js');
+                    await ensureScript('https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.fog.min.js');
+                    const styles = getComputedStyle(root);
+                    const accent = parseColor(styles.getPropertyValue('--accent'));
+                    const surface = parseColor(styles.getPropertyValue('--surface'));
+                    const bg = parseColor(styles.getPropertyValue('--bg'));
+                    if (window.vantaFogInstance) window.vantaFogInstance.destroy();
+                    window.vantaFogInstance = window.VANTA.FOG({
+                        el: document.body,
+                        mouseControls: true,
+                        touchControls: true,
+                        gyroControls: false,
+                        minHeight: 200,
+                        minWidth: 200,
+                        highlightColor: accent,
+                        midtoneColor: surface,
+                        baseColor: bg,
+                        blurFactor: 0.9,
+                        speed: 2.6,
+                        zoom: 0.7
+                    });
+                } catch (e) {
+                    if (window.vantaFogInstance) {
+                        window.vantaFogInstance.destroy();
+                        window.vantaFogInstance = null;
+                    }
+                }
+            };
+
             const themeBg = s.background || d.background || { type: 'color', value: '#0a0a0a' };
             const customBg = s.customBackground;
             const isCustomActive = customBg && customBg.type !== 'none';
@@ -120,6 +186,8 @@
             } else {
                 root.style.setProperty('--bg-image', 'none');
             }
+
+            applyFog();
         },
 
         onChange(callback) {

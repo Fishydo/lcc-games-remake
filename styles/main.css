@@ -200,6 +200,130 @@ p {
     font-size: 1.125rem;
 }
 
+.mini-player {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    box-shadow: var(--shadow-lg);
+    z-index: 9999;
+    width: 64px;
+    overflow: hidden;
+    transition: width 0.2s ease, right 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mini-player.hidden {
+    display: none;
+}
+
+.mini-player.shifted {
+    right: 110px;
+}
+
+.mini-player:hover {
+    width: 280px;
+    box-shadow: var(--shadow-xl);
+}
+
+.mini-player-art {
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    overflow: hidden;
+    border: 2px solid rgba(56, 189, 248, 0.4);
+    background: rgba(56, 189, 248, 0.2);
+    flex-shrink: 0;
+}
+
+.mini-player-art img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.mini-player-info {
+    flex: 1;
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+    opacity: 0;
+    max-width: 0;
+    transition: opacity 0.2s ease, max-width 0.2s ease;
+}
+
+.mini-player-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mini-player-artist {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mini-player-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0;
+    max-width: 0;
+    transition: opacity 0.2s ease, max-width 0.2s ease;
+}
+
+.mini-player-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    background: rgba(15, 23, 42, 0.7);
+    color: var(--text);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+}
+
+.mini-player-btn.play {
+    background: linear-gradient(120deg, #38bdf8, #818cf8);
+    color: #0f172a;
+    border: none;
+}
+
+.mini-player-progress {
+    height: 3px;
+    border-radius: 999px;
+    background: rgba(148, 163, 184, 0.2);
+    overflow: hidden;
+}
+
+.mini-player-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(120deg, #38bdf8, #a78bfa);
+}
+
+.mini-player:hover .mini-player-info,
+.mini-player:hover .mini-player-controls {
+    opacity: 1;
+    max-width: 200px;
+}
+
+[data-reduce-blur="true"] * {
+    backdrop-filter: none !important;
+    filter: none !important;
+}
+
 .text-muted {
     color: var(--text-muted);
 }

@@ -36,6 +36,9 @@ let searchTimeout;
 let searchAutoHideTimeout;
 let isMuted = false;
 let lastVolume = parseInt(localStorage.getItem('arcora_last_volume')) || 100;
+const MINI_PLAYER_KEY = 'lcc_music_state';
+const MINI_PLAYER_COMMAND = 'lcc_music_command';
+let lastMiniStateUpdate = 0;
 
 // --- DOM Elements ---
 const $ = id => document.getElementById(id);
@@ -67,6 +70,23 @@ const fallbackContainer = $('fallbackContainer');
 const fallbackFrame = $('fallbackFrame');
 const likedCount = $('likedCount');
 const recentCount = $('recentCount');
+
+const emitMiniState = (payload = {}) => {
+    const state = {
+        title: payload.title ?? currentTrack?.title ?? '',
+        artist: payload.artist ?? currentTrack?.artist ?? '',
+        artwork: payload.artwork ?? currentTrack?.artwork ?? '',
+        previewUrl: payload.previewUrl ?? currentTrack?.previewUrl ?? '',
+        source: activeSource,
+        isPlaying,
+        currentTime: payload.currentTime ?? 0,
+        duration: payload.duration ?? 0,
+        active: true,
+        updatedAt: Date.now()
+    };
+    localStorage.setItem(MINI_PLAYER_KEY, JSON.stringify(state));
+    window.dispatchEvent(new CustomEvent('lcc-mini-state', { detail: state }));
+};
 
 // --- Initialization ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -142,7 +162,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     }
+
+    emitMiniState({ active: true });
+
+    window.addEventListener('storage', (e) => {
+        if (e.key !== MINI_PLAYER_COMMAND || !e.newValue) return;
+        try {
+            const command = JSON.parse(e.newValue);
+            if (!command || command.origin === 'music-page') return;
+            if (command.action === 'toggle') togglePlayback();
+            if (command.action === 'next') playNext();
+            if (command.action === 'prev') playPrev();
+        } catch (err) { }
+    });
 });
+
+window.addEventListener('beforeunload', () => {
+    localStorage.setItem(MINI_PLAYER_KEY, JSON.stringify({ active: false, updatedAt: Date.now() }));
+});
+
+window.lccMiniPlayerCommand = (action) => {
+    if (action === 'toggle') togglePlayback();
+    if (action === 'next') playNext();
+    if (action === 'prev') playPrev();
+};
 
 // --- Search Logic (iTunes) ---
 function handleSearchInput() {
@@ -251,6 +294,7 @@ function playSong(title, artist, artwork, genre = '', previewUrl = '', index = -
     currentTrack = { title, artist, artwork, genre, previewUrl };
     updateLikeBtn();
     fetchLyrics(artist, title);
+    emitMiniState({ title, artist, artwork, previewUrl, currentTime: 0, duration: 0 });
 
     if (index !== -1) currentIndex = index;
 
@@ -376,10 +420,11 @@ function loadVid(videoId) {
 
 // --- Player Implementation ---
 window.onYouTubeIframeAPIReady = () => {
-    player = new YT.Player('fallbackContainer', { // We use fallbackContainer as a holder first, but mapped to a specific div usually
+    player = new YT.Player('fallbackContainer', {
         height: '100%',
         width: '100%',
         videoId: '',
+        host: 'https://www.youtube-nocookie.com',
         playerVars: {
             'autoplay': 1,
             'controls': 0,
@@ -439,7 +484,7 @@ function useFallbackPlayer(videoId) {
     frame.style.width = '100%';
     frame.style.height = '100%';
     frame.allow = "autoplay; encrypted-media; picture-in-picture";
-    frame.src = PROXY_BASE + videoId;
+    frame.src = isProxyMode ? PROXY_BASE + videoId : `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&controls=0&rel=0&playsinline=1`;
 
     fallbackContainer.appendChild(frame);
     fallbackContainer.classList.add('show');
@@ -698,6 +743,12 @@ function updateProgress() {
         currentTimeEl.textContent = formatTime(curr);
         totalTimeEl.textContent = formatTime(dur);
 
+        const now = Date.now();
+        if (now - lastMiniStateUpdate > 1000) {
+            lastMiniStateUpdate = now;
+            emitMiniState({ currentTime: curr, duration: dur });
+        }
+
         // Sync Lyrics
         const lines = document.querySelectorAll('.lyrics-line[data-time]');
         let activeIdx = -1;
@@ -789,6 +840,7 @@ function setVolumeUI(vol) {
 
 function updatePlayBtn() {
     playPauseBtn.querySelector('i').className = isPlaying ? 'fa-solid fa-pause' : 'fa-solid fa-play';
+    emitMiniState({});
 }
 
 // --- Playlist Management ---
