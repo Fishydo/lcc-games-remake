@@ -29,7 +29,7 @@
         const logoSection = document.createElement('a');
         logoSection.className = 'logo-section';
         logoSection.href = rootPrefix + 'index2.html';
-        logoSection.innerHTML = '<div class="logo-placeholder"><i data-lucide="zap"></i></div>';
+        logoSection.innerHTML = '<div class="logo-placeholder"><i data-lucide="gamepad-2"></i></div>';
         topbarContainer.appendChild(logoSection);
 
         const navButtons = document.createElement('div');
@@ -40,7 +40,7 @@
             { name: 'Movies', icon: 'film', link: 'pages/movies.html' },
             { name: 'Games', icon: 'gamepad-2', link: 'pages/games.html' },
             { name: 'Search', icon: 'search', link: 'staticsjv2/index.html' },
-            { name: 'AI Chat', icon: 'bot', link: 'pages/chat.html' },
+            { name: 'LCC AI', icon: 'bot', link: 'pages/chat.html' },
             { separator: true },
             { name: 'Settings', icon: 'settings', link: 'pages/settings.html' }
         ];
