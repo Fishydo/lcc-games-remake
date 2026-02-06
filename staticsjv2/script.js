@@ -2,6 +2,8 @@
 const SITE_CONFIG = window.SITE_CONFIG || {};
 const DEFAULT_WISP = SITE_CONFIG.defaultWisp || "wss://glseries.net/wisp/";
 const WISP_SERVERS = SITE_CONFIG.wispServers || [];
+const ADBLOCK_KEY = 'proxyAdblock';
+const PROXY_DIRECTION_KEY = 'proxyDirection';
 
 // state
 const BareMux = window.BareMux || { BareMuxConnection: class { setTransport() { } } };
@@ -146,7 +148,8 @@ async function registerServiceWorker() {
         type: "config",
         wispurl: localStorage.getItem("proxServer") ?? DEFAULT_WISP,
         servers: getAllWispServers(),
-        autoswitch: localStorage.getItem('wispAutoswitch') !== 'false'
+        autoswitch: localStorage.getItem('wispAutoswitch') !== 'false',
+        adblock: localStorage.getItem(ADBLOCK_KEY) !== 'false'
     };
 
     const send = () => {
@@ -395,7 +398,14 @@ function handleSubmit(url) {
     tab.loading = true;
     showIframeLoading(true, input);
     updateLoadingBar(tab, 10);
-    tab.frame.go(input);
+    const routeThroughProxy = localStorage.getItem(PROXY_DIRECTION_KEY) !== 'false';
+    if (routeThroughProxy) {
+        tab.frame.go(input);
+    } else {
+        tab.frame.frame.src = input;
+        tab.url = input;
+        updateAddressBar();
+    }
 }
 
 function updateLoadingBar(tab, percent) {
@@ -441,6 +451,33 @@ function openSettings() {
 
     renderServerList();
     renderBackgroundPresets();
+    syncAdblockToggle();
+    syncProxyDirectionToggle();
+}
+
+function syncAdblockToggle() {
+    const toggle = document.getElementById('adblock-toggle');
+    if (!toggle) return;
+    const enabled = localStorage.getItem(ADBLOCK_KEY) !== 'false';
+    toggle.classList.toggle('active', enabled);
+    toggle.onclick = () => {
+        const next = !toggle.classList.contains('active');
+        toggle.classList.toggle('active', next);
+        localStorage.setItem(ADBLOCK_KEY, next);
+        navigator.serviceWorker.controller?.postMessage({ type: 'config', adblock: next });
+    };
+}
+
+function syncProxyDirectionToggle() {
+    const toggle = document.getElementById('proxy-direction-toggle');
+    if (!toggle) return;
+    const enabled = localStorage.getItem(PROXY_DIRECTION_KEY) !== 'false';
+    toggle.classList.toggle('active', enabled);
+    toggle.onclick = () => {
+        const next = !toggle.classList.contains('active');
+        toggle.classList.toggle('active', next);
+        localStorage.setItem(PROXY_DIRECTION_KEY, next);
+    };
 }
 
 function renderServerList() {

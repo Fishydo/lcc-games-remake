@@ -272,3 +272,10 @@ const PhantomSearch = {
 
 document.addEventListener('DOMContentLoaded', () => PhantomSearch.init('search-input'));
 window.PhantomSearch = PhantomSearch;
+window.handleSearch = (event) => {
+    if (event) event.preventDefault();
+    const input = document.getElementById('search-input');
+    const query = input?.value?.trim();
+    if (!query) return;
+    PhantomSearch.selectItem({ type: 'web', query });
+};
