@@ -124,7 +124,8 @@ self.addEventListener('activate', (e) => e.waitUntil(self.clients.claim()));
 let wispConfig = {
     wispurl: null,
     servers: [],
-    autoswitch: true
+    autoswitch: true,
+    adblock: true
 };
 
 let serverHealth = new Map();
@@ -245,6 +246,9 @@ self.addEventListener("message", ({ data }) => {
                 setTimeout(proactiveServerCheck, 500);
             }
         }
+        if (typeof data.adblock !== 'undefined') {
+            wispConfig.adblock = data.adblock;
+        }
         if (wispConfig.wispurl && resolveConfigReady) {
             resolveConfigReady();
             resolveConfigReady = null;
@@ -262,7 +266,7 @@ self.addEventListener("message", ({ data }) => {
 
 self.addEventListener("fetch", (event) => {
     event.respondWith((async () => {
-        if (isAdBlocked(event.request.url)) {
+        if (wispConfig.adblock && isAdBlocked(event.request.url)) {
             console.log("SW: Blocked ad request:", event.request.url);
             return new Response(new ArrayBuffer(0), { status: 204 });
         }

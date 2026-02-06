@@ -1,13 +1,14 @@
 // site config
 
 window.SITE_CONFIG = {
-    name: "Phantom",
-    fullName: "Phantom Unblocked",
-    version: "1.0.11",
+    name: "LCC Games",
+    fullName: "LCC Games Hub",
+    version: "2.0.0",
 
     changelog: [
-        "some code consolidation and fixxes",
-        "suggest features in the discord server"
+        "Rebranded the experience to LCC Games",
+        "Introduced the new home music widget",
+        "Visual refresh for the home layout and hero styling"
     ],
 
     // quotes
@@ -67,8 +68,9 @@ window.SITE_CONFIG = {
         "**make the only song in music be lebron lebron lebron james**",
         "***finish extra page into credits and make this todo be tucked away somewhere and not the main part of it***"
     ],
-    defaultWisp: "wss://glseries.net/wisp/",
+    defaultWisp: "wss://lcc-fast.mooo.com/wisp/",
     wispServers: [
+        { name: "LCC Fast", url: "wss://lcc-fast.mooo.com/wisp/" },
         { name: "GLSeries Wisp", url: "wss://glseries.net/wisp/" },
         { name: "Rhw's Wisp", url: "wss://wisp.rhw.one/wisp/" },
     ],
@@ -91,7 +93,7 @@ window.SITE_CONFIG = {
         panicUrl: "https://classroom.google.com",
         maxMovieRating: "R",
         gameLibrary: "multi",
-        discordWidget: true,
+        discordWidget: false,
         miniplayer: true,
         leaveConfirmation: false,
         showChangelogOnUpdate: true,
@@ -100,19 +102,27 @@ window.SITE_CONFIG = {
         backgroundRotation: true,
         lastBackgroundRotation: 0,
         lastSeenFeatured: 'none',
-        background: { type: 'color', value: '#0a0a0a' },
-        customBackground: { id: 'none', type: 'none' },
-        accentColor: '#ffffff',
-        surfaceColor: '#0f0f0f',
-        secondaryColor: '#2e2e33',
-        textColor: '#e4e4e7',
+        background: { type: 'image', value: 'https://raw.githubusercontent.com/evanhnry/brave-wallpapers/refs/heads/main/Brave/clay-banks-u27Rrbs9Dwc-unsplash.jpg' },
+        customBackground: { id: 'mountain', type: 'image', url: 'https://raw.githubusercontent.com/evanhnry/brave-wallpapers/refs/heads/main/Brave/clay-banks-u27Rrbs9Dwc-unsplash.jpg' },
+        accentColor: '#38bdf8',
+        surfaceColor: '#121826',
+        secondaryColor: '#182033',
+        textColor: '#e0f2fe',
+        textSecondaryColor: '#bae6fd',
+        textDimColor: '#7dd3fc',
+        surfaceHoverColor: '#1f2a3d',
+        surfaceActiveColor: '#2b3a52',
+        borderColor: '#1f2a3d',
+        borderLightColor: '#2b3a52',
+        reduceBlur: false,
+        fogBackground: false,
     },
 
     themePresets: {
         dark: { name: 'Dark (Default)', bg: { type: 'color', value: '#0a0a0a' }, surface: '#0f0f0f', surfaceHover: '#1a1a1a', surfaceActive: '#252525', secondary: '#2e2e33', border: '#2a2a2a', borderLight: '#2a2a2a', text: '#e4e4e7', textSec: '#71717a', textDim: '#52525b', accent: '#ffffff' },
         midnight: { name: 'Midnight', bg: { type: 'color', value: '#000000' }, surface: '#050505', surfaceHover: '#111111', surfaceActive: '#1a1a1a', secondary: '#111111', border: '#1a1a1a', borderLight: '#111111', text: '#ededed', textSec: '#a3a3a3', textDim: '#737373', accent: '#d4d4d4' },
         abyss: { name: 'Abyss', bg: { type: 'color', value: '#020617' }, surface: '#0f172a', surfaceHover: '#1e293b', surfaceActive: '#334155', secondary: '#1e293b', border: '#1e293b', borderLight: '#1e293b', text: '#f1f5f9', textSec: '#94a3b8', textDim: '#64748b', accent: '#38bdf8' },
-        phantom: { name: 'Phantom', bg: { type: 'color', value: '#0f0a14' }, surface: '#1a0f24', surfaceHover: '#2e1a40', surfaceActive: '#4c2a5c', secondary: '#2e1a40', border: '#2e1a40', borderLight: '#2e1a40', text: '#f3e8ff', textSec: '#d8b4fe', textDim: '#c084fc', accent: '#c084fc' },
+        phantom: { name: 'LCC Neon', bg: { type: 'color', value: '#0b0f17' }, surface: '#121826', surfaceHover: '#1f2a3d', surfaceActive: '#2b3a52', secondary: '#182033', border: '#1f2a3d', borderLight: '#2b3a52', text: '#e0f2fe', textSec: '#bae6fd', textDim: '#7dd3fc', accent: '#38bdf8' },
         rosepine: { name: 'Rose Pine', bg: { type: 'color', value: '#191724' }, surface: '#1f1d2e', surfaceHover: '#26233a', surfaceActive: '#524f67', secondary: '#26233a', border: '#26233a', borderLight: '#1f1d2e', text: '#e0def4', textSec: '#908caa', textDim: '#6e6a86', accent: '#ebbcba' },
         ocean: { name: 'Oceanic', bg: { type: 'color', value: '#011627' }, surface: '#0b2942', surfaceHover: '#1d3b53', surfaceActive: '#2d4b63', secondary: '#0b2942', border: '#1d3b53', borderLight: '#0b2942', text: '#d6deeb', textSec: '#5f7e97', textDim: '#011627', accent: '#7fdbca' },
         forest: { name: 'Forest', bg: { type: 'color', value: '#020d06' }, surface: '#051a0d', surfaceHover: '#0a2e17', surfaceActive: '#0f4221', secondary: '#051a0d', border: '#0a2e17', borderLight: '#051a0d', text: '#ecfdf5', textSec: '#6ee7b7', textDim: '#064e3b', accent: '#10b981' },
@@ -125,15 +135,15 @@ window.SITE_CONFIG = {
         { id: 'Night sky', name: 'Night sky', type: 'image', url: 'https://images.pexels.com/photos/5675745/pexels-photo-5675745.jpeg', overlay: 0.3 },
         { id: 'winter-mountains', name: 'Winter mountains', type: 'image', url: 'https://images.pexels.com/photos/1287145/pexels-photo-1287145.jpeg', overlay: 0.3 },
         { id: 'f1 car', name: 'F1 Car', type: 'image', url: 'https://images.pexels.com/photos/14401632/pexels-photo-14401632.jpeg', overlay: 0.3 },
-        { id: 'moon-landing', name: 'Moon Landing', type: 'image', url: 'https://images.pexels.com/photos/41162/moon-landing-apollo-11-nasa-buzz-aldrin-41162.jpeg', overlay: 0.3, objectPosition: 'top left', active: true },
+        { id: 'moon-landing', name: 'Moon Landing', type: 'image', url: 'https://images.pexels.com/photos/41162/moon-landing-apollo-11-nasa-buzz-aldrin-41162.jpeg', overlay: 0.3, objectPosition: 'top left' },
         { id: 'turtle', name: 'Turtle', type: 'image', url: 'https://images.unsplash.com/photo-1501791187590-9ef2612ba1eb?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', overlay: 0.3 },
         { id: 'road', name: 'Road', type: 'image', url: 'https://images.unsplash.com/photo-1508233620467-f79f1e317a05', overlay: 0.3 },
         { id: 'railroad', name: 'Railroad', type: 'image', url: 'https://images.unsplash.com/photo-1505832018823-50331d70d237', overlay: 0.3 },
-        { id: 'mountain', name: 'Mountain', type: 'image', url: 'https://raw.githubusercontent.com/evanhnry/brave-wallpapers/refs/heads/main/Brave/clay-banks-u27Rrbs9Dwc-unsplash.jpg', overlay: 0.3 },
+        { id: 'mountain', name: 'Mountain', type: 'image', url: 'https://raw.githubusercontent.com/evanhnry/brave-wallpapers/refs/heads/main/Brave/clay-banks-u27Rrbs9Dwc-unsplash.jpg', overlay: 0.3, active: true },
     ],
 
     cloakPresets: [
-        { name: "Phantom", icon: "/favicon.svg", title: "Phantom Unblocked" },
+        { name: "LCC Games", icon: "/favicon.svg", title: "LCC Games Hub" },
         { name: "Edpuzzle", icon: "https://edpuzzle.imgix.net/favicons/favicon-32.png", title: "Edpuzzle" },
         { name: "Google Docs", icon: "https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico", title: "Untitled document - Google Docs" },
         { name: "Canvas", icon: "https://du11hjcvx0uqb.cloudfront.net/dist/images/favicon-e10d657a73.ico", title: "Dashboard" },
@@ -150,5 +160,3 @@ window.SITE_CONFIG = {
         { name: "nothing", icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=", title: "\u200B" },
     ]
 }
-
-

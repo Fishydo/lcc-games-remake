@@ -38,7 +38,7 @@ class PhantomChat {
         this.startPlaceholderAnimation();
 
         if (window.Notify) {
-            Notify.success('Ready', 'Phantom AI is loaded');
+            Notify.success('Ready', 'LCC AI is loaded');
         }
     }
 
@@ -339,7 +339,7 @@ class PhantomChat {
 
         try {
             const messages = [
-                { role: 'system', content: 'You are Phantom AI, a helpful and knowledgeable assistant. Use Markdown formatting. Be concise but thorough.' },
+                { role: 'system', content: 'You are LCC AI, a helpful and knowledgeable assistant. Use Markdown formatting. Be concise but thorough.' },
                 ...conv.messages.slice(-10).map(m => ({
                     role: m.role === 'ai' ? 'assistant' : m.role,
                     content: m.content
@@ -410,7 +410,7 @@ class PhantomChat {
 
         if (!conv || !conv.messages.length) {
             this.dom.hero.style.display = 'block';
-            this.dom.title.textContent = 'Phantom AI';
+            this.dom.title.textContent = 'LCC AI';
         } else {
             this.dom.hero.style.display = 'none';
             this.dom.title.textContent = conv.title;
@@ -443,7 +443,7 @@ class PhantomChat {
         div.className = `message ${role}-message`;
         if (id) div.id = id;
 
-        const icon = role === 'ai' ? 'ghost' : 'user';
+        const icon = role === 'ai' ? 'sparkles' : 'user';
 
         let messageHtml = '';
 
@@ -494,7 +494,7 @@ class PhantomChat {
 
         this.dom.chatBody.appendChild(div);
 
-        if (window.lucide) lucide.createIcons({ icons: { ghost: lucide.icons.ghost, user: lucide.icons.user }, nameAttr: 'data-lucide' });
+        if (window.lucide) lucide.createIcons({ icons: { sparkles: lucide.icons.sparkles, user: lucide.icons.user }, nameAttr: 'data-lucide' });
 
         if (!isThinking && type === 'text' && window.hljs) {
             div.querySelectorAll('pre code').forEach(block => hljs.highlightElement(block));
